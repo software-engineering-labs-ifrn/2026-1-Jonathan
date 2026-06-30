@@ -1,13 +1,24 @@
-# Calculadora de Formas Geométricas
+# Calculadora de Formas Geométricas e Física
 
-Uma aplicação em Python para calcular perímetros e áreas de diversas formas geométricas.
+Aplicação em Python para calcular perímetros, áreas e alguns conceitos básicos de física por meio de um menu interativo.
 
 ## 📋 Descrição
 
-Este projeto implementa uma calculadora interativa que permite calcular perímetros e áreas de formas geométricas comuns, incluindo:
+Este projeto implementa uma calculadora que permite:
 
-- **Área**: Quadrado, Retângulo, Triângulo, Círculo, Pentágono, Hexágono e Polígonos com N lados
-- **Perímetro**: Quadrado, Retângulo, Triângulo, Círculo, Pentágono, Hexágono e Polígonos com N lados
+- Calcular perímetros de figuras geométricas comuns
+- Calcular áreas de figuras geométricas comuns
+- Resolver operações básicas de física, como velocidade média, movimento uniforme, MUV, queda livre e lançamento vertical
+
+As figuras contempladas incluem:
+
+- Quadrado
+- Retângulo
+- Triângulo
+- Círculo
+- Pentágono
+- Hexágono
+- Polígono de N lados
 
 ## 🚀 Como Executar
 
@@ -15,26 +26,43 @@ Este projeto implementa uma calculadora interativa que permite calcular perímet
 python Main.py
 ```
 
-O programa exibirá um menu interativo onde você pode:
-1. Escolher entre calcular Perímetro ou Área
-2. Selecionar a forma geométrica desejada
-3. Inserir os valores necessários (lados, raio, apótema, etc.)
-4. Visualizar o resultado do cálculo
+O programa exibe um menu interativo em que o usuário pode:
+1. Escolher entre Matemática e Física
+2. Selecionar o tipo de cálculo desejado
+3. Informar os dados necessários
+4. Visualizar o resultado calculado
 
 ## 📁 Estrutura do Projeto
 
+```text
+.
+├── Main.py                  # Ponto de entrada da aplicação
+├── operacoes.py             # Abstrações e implementações das operações
+├── registro_operacoes.py    # Registro das operações concretas usadas pelos menus
+├── README.md                # Documentação do projeto
+├── Docs/
+│   └── relatorio_revisao.md
+├── fisica/
+│   ├── __init__.py
+│   └── velocidades.py
+└── matematica/
+    ├── __init__.py
+    ├── area/
+    │   ├── __init__.py
+    │   └── area.py
+    └── perimetro/
+        ├── __init__.py
+        └── perimetro.py
 ```
-├── Main.py              # Arquivo principal com a interface do usuário
-├── README.md            # Este arquivo
-├── matematica/          # Módulo com funções matemáticas
-│   ├── area/           # Cálculos de áreas
-│   │   ├── __init__.py
-│   │   └── area.py
-│   └── perimetro/      # Cálculos de perímetros
-│       ├── __init__.py
-│       └── perimetro.py
-└── fisica/             # Módulo de física (extensível)
-```
+
+## 🧩 Arquitetura
+
+O projeto foi organizado com foco em boas práticas de design, incluindo:
+
+- Separação entre cálculo e interação com o usuário
+- Uso de abstrações para operações
+- Registro de operações para desacoplar o menu das implementações concretas
+- Estrutura modular para facilitar manutenção e extensão
 
 ## 🛠️ Requisitos
 
