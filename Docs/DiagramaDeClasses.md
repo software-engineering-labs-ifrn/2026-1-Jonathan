@@ -1,7 +1,5 @@
 ```mermaid
 classDiagram
-
-classDiagram
 direction LR
     class MenuDispatcher {
 	    -operacoes: dict
