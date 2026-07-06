@@ -1,6 +1,3 @@
-```mermaid
-classdiagram
-
 flowchart LR
 
     Usuario[👤 Usuário]
@@ -8,7 +5,7 @@ flowchart LR
     subgraph Sistema["Sistema Calculadora"]
         UC1((Iniciar sistema))
         UC2((Selecionar Matemática))
-        UC3(("Selecionar Física"))
+        UC3(("Selecionar Física)"))
 
         UC4((Calcular Área))
         UC5((Calcular Perímetro))
@@ -55,4 +52,3 @@ flowchart LR
     UC13 -.<<include>>.-> UC14
 
     UC14 --> UC15
-```
