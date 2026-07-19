@@ -4,8 +4,6 @@
 
 ---
 
-## Fluxo Principal — Calcular Velocidade Média
-
 ```mermaid
 sequenceDiagram
     actor Usuario
@@ -14,75 +12,41 @@ sequenceDiagram
     participant Dispatcher as MenuDispatcher
     participant Registro as registro_operacoes
     participant Op as OperacaoVelocidadeMedia
-    participant Calc as velocidades.py (velocidade_media)
+    participant Calc as velocidades.py
 
     Usuario->>MenuFis: Digita "1" (Velocidades)
     MenuFis->>Dispatcher: executar("1")
     Dispatcher->>MenuVel: menu_velocidades()
-    MenuVel->>MenuVel: Exibe menu de velocidades
-    MenuVel-->>Usuario: "1-Velocidade Média / 2-MU / 3-MUV / ..."
+    MenuVel-->>Usuario: Exibe opções (1-Velocidade Média, 2-MU, 3-MUV ... 0-Voltar)
 
     Usuario->>MenuVel: Digita "1" (Velocidade Média)
     MenuVel->>Registro: criar_operacoes_velocidades()
-    Registro-->>MenuVel: {operacoes com OperacaoVelocidadeMedia, ...}
+    Registro-->>MenuVel: mapa de operações instanciadas
     MenuVel->>Dispatcher: executar("1")
-    Dispatcher->>Op: OperacaoVelocidadeMedia.calcular()
+    Dispatcher->>Op: op.calcular()
     Op->>Calc: velocidade_media()
-    Calc-->>Usuario: "Digite a distância percorrida (em metros): "
-    Usuario->>Calc: Informa distância (ex: 150)
-    Calc-->>Usuario: "Digite o tempo gasto (em segundos): "
-    Usuario->>Calc: Informa tempo (ex: 30)
-    Calc->>Calc: calcular_velocidade_media(150, 30) → 150/30 = 5.00
-    Calc-->>Usuario: "Velocidade média: 5.00 m/s"
-```
-
----
-
-## Fluxo de Exceção — Tempo igual a zero
-
-```mermaid
-sequenceDiagram
-    actor Usuario
-    participant Calc as velocidades.py (velocidade_media)
 
     Calc-->>Usuario: "Digite a distância percorrida (em metros): "
-    Usuario->>Calc: Informa distância (ex: 100)
-    Calc-->>Usuario: "Digite o tempo gasto (em segundos): "
-    Usuario->>Calc: Informa tempo = 0
-    Calc->>Calc: calcular_velocidade_media(100, 0) → ZeroDivisionError
-    Calc-->>Usuario: Erro de divisão por zero (exceção não tratada)
-
-    Note over Calc,Usuario: Comportamento atual: o Python lança ZeroDivisionError.<br/>Melhoria sugerida: validar tempo > 0 antes de calcular.
-```
-
----
-
-## Fluxo de Exceção — Entrada Inválida (dado não numérico)
-
-```mermaid
-sequenceDiagram
-    actor Usuario
-    participant Calc as velocidades.py (ler_numero)
-
-    Calc-->>Usuario: "Digite a distância percorrida (em metros): "
-    Usuario->>Calc: Digita texto inválido (ex: "cinquenta")
-    Calc->>Calc: float("cinquenta") → ValueError (não tratado)
-    Calc-->>Usuario: Traceback — ValueError: could not convert string to float
-
-    Note over Calc,Usuario: O erro pode ocorrer em qualquer um dos prompts de entrada.<br/>O fluxo é interrompido imediatamente, sem possibilidade<br/>de correção pelo usuário na sessão atual.
-```
-
----
-
-## Fluxo de Exceção — Campo em Branco
-
-```mermaid
-sequenceDiagram
-    actor Usuario
-    participant Calc as velocidades.py (ler_numero)
+    alt Entrada válida
+        Usuario->>Calc: Informa distância (ex: 150)
+    else Entrada inválida (texto ou campo vazio)
+        Usuario->>Calc: Digita valor inválido (ex: "abc" ou "")
+        Calc->>Calc: float("abc") → ValueError não tratado
+        Calc-->>Usuario: Traceback — programa encerra o fluxo com erro
+    end
 
     Calc-->>Usuario: "Digite o tempo gasto (em segundos): "
-    Usuario->>Calc: Pressiona Enter sem digitar nada ("")
-    Calc->>Calc: float("") → ValueError (não tratado)
-    Calc-->>Usuario: Traceback — ValueError: could not convert string to float
+    alt Entrada válida e tempo > 0
+        Usuario->>Calc: Informa tempo (ex: 30)
+        Calc->>Calc: calcular_velocidade_media(150, 30) → 150/30 = 5.00
+        Calc-->>Usuario: "Velocidade média: 5.00 m/s"
+    else Entrada inválida (texto ou campo vazio)
+        Usuario->>Calc: Digita valor inválido (ex: "abc" ou "")
+        Calc->>Calc: float("abc") → ValueError não tratado
+        Calc-->>Usuario: Traceback — programa encerra o fluxo com erro
+    else Tempo igual a zero
+        Usuario->>Calc: Informa tempo = 0
+        Calc->>Calc: 150 / 0 → ZeroDivisionError não tratado
+        Calc-->>Usuario: Traceback — ZeroDivisionError: division by zero
+    end
 ```

@@ -4,81 +4,41 @@
 
 ---
 
-## Fluxo Principal — Selecionar Matemática
-
 ```mermaid
 sequenceDiagram
     actor Usuario
     participant Main as Main (menu_principal)
     participant Dispatcher as MenuDispatcher
-    participant MenuMat as menu_matematica
+    participant SubMenu as menu_matematica / menu_fisica
 
     Usuario->>Main: Executa o programa
-    Main->>Main: Exibe menu principal
     Main-->>Usuario: "1 - Matemática / 2 - Física / 0 - Sair"
 
-    Usuario->>Main: Digita "1"
-    Main->>Dispatcher: executar("1")
-    Dispatcher->>MenuMat: menu_matematica()
-    MenuMat->>MenuMat: Exibe menu de cálculos matemáticos
-    MenuMat-->>Usuario: "1 - Calcular Perímetro / 2 - Calcular Área / 0 - Voltar"
-```
+    loop Enquanto usuário não sair
+        Usuario->>Main: Digita opção
 
----
+        alt Opção "1" — Matemática
+            Main->>Dispatcher: executar("1")
+            Dispatcher->>SubMenu: menu_matematica()
+            SubMenu-->>Usuario: Exibe sub-menu de matemática
+            Note over SubMenu,Usuario: Usuário interage com o sub-menu<br/>e eventualmente volta para cá.
 
-## Fluxo Alternativo — Selecionar Física
+        else Opção "2" — Física
+            Main->>Dispatcher: executar("2")
+            Dispatcher->>SubMenu: menu_fisica()
+            SubMenu-->>Usuario: Exibe sub-menu de física
+            Note over SubMenu,Usuario: Usuário interage com o sub-menu<br/>e eventualmente volta para cá.
 
-```mermaid
-sequenceDiagram
-    actor Usuario
-    participant Main as Main (menu_principal)
-    participant Dispatcher as MenuDispatcher
-    participant MenuFis as menu_fisica
+        else Opção "0" — Sair
+            Main->>Dispatcher: executar("0")
+            Dispatcher->>Dispatcher: sair_programa()
+            Dispatcher-->>Usuario: "Até logo!"
+            Main->>Main: break — encerra o programa
 
-    Usuario->>Main: Executa o programa
-    Main->>Main: Exibe menu principal
-    Main-->>Usuario: "1 - Matemática / 2 - Física / 0 - Sair"
-
-    Usuario->>Main: Digita "2"
-    Main->>Dispatcher: executar("2")
-    Dispatcher->>MenuFis: menu_fisica()
-    MenuFis->>MenuFis: Exibe menu de cálculos de física
-    MenuFis-->>Usuario: "1 - Velocidades / 0 - Voltar"
-```
-
----
-
-## Fluxo de Exceção — Opção Inválida
-
-```mermaid
-sequenceDiagram
-    actor Usuario
-    participant Main as Main (menu_principal)
-    participant Dispatcher as MenuDispatcher
-
-    Usuario->>Main: Executa o programa
-    Main-->>Usuario: Exibe menu principal
-
-    Usuario->>Main: Digita "9" (opção inválida)
-    Main->>Dispatcher: executar("9")
-    Dispatcher->>Dispatcher: operacoes.get("9") retorna None
-    Dispatcher-->>Usuario: "Opção inválida! Tente novamente."
-    Main->>Main: Retorna ao loop do menu principal
-```
-
----
-
-## Fluxo — Sair do programa
-
-```mermaid
-sequenceDiagram
-    actor Usuario
-    participant Main as Main (menu_principal)
-    participant Dispatcher as MenuDispatcher
-
-    Usuario->>Main: Digita "0"
-    Main->>Dispatcher: executar("0")
-    Dispatcher->>Dispatcher: chama sair_programa()
-    Dispatcher-->>Usuario: "Até logo!"
-    Main->>Main: break — encerra o loop principal
+        else Opção inválida
+            Main->>Dispatcher: executar(opcao)
+            Dispatcher->>Dispatcher: operacoes.get(opcao) → None
+            Dispatcher-->>Usuario: "Opção inválida! Tente novamente."
+        end
+    end
 ```
